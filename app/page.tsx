@@ -36,7 +36,10 @@ export default function Home() {
           <Link href="#ecosystem">Ecosystem</Link>
           <Link href="/case-study">Case study</Link>
         </div>
-        <span className="status-pill"><i /> In development</span>
+        <div className="nav-actions">
+          <a href="https://chat.whatsapp.com/DdZJX2lpAsiDyuJdlAQ1jZ" target="_blank" rel="noopener noreferrer" className="button button-dark community-button">Join the community <span>↗</span></a>
+          <span className="status-pill"><i /> In development</span>
+        </div>
       </nav>
 
       <section className="hero section-pad">
@@ -50,6 +53,7 @@ export default function Home() {
           <div className="hero-actions">
             <Link href="#vision" className="button button-dark">Explore the project <span>↓</span></Link>
             <Link href="/case-study" className="button button-light">Read the case study <span>↗</span></Link>
+            <a href="https://chat.whatsapp.com/DdZJX2lpAsiDyuJdlAQ1jZ" target="_blank" rel="noopener noreferrer" className="button button-light">Join the community <span>↗</span></a>
           </div>
         </div>
         <div className="hero-meta"><span>01 / 06</span><span>Currently in development</span></div>
