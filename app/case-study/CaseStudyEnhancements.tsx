@@ -3,7 +3,38 @@
 import { usePathname } from "next/navigation";
 
 type Source = { name: string; kind: string; url: string; logo?: string };
-type CaseVisual = { kicker: string; title: string; description: string; sources: Source[]; metrics: { label: string; value: string; note: string }[]; bars?: { label: string; value: number; display: string }[] };
+type Exhibit = { title: string; label: string; url: string; description: string };
+type CaseVisual = { kicker: string; title: string; description: string; sources: Source[]; metrics: { label: string; value: string; note: string }[]; bars?: { label: string; value: number; display: string }[]; exhibits?: Exhibit[] };
+
+const officialFbiSeal = "https://www.fbi.gov/image-repository/color-fbi-seal.png";
+const officialNsaLogo = "https://www.nsa.gov/portals/75/images/nsa-logo.png";
+
+const surveillanceExhibits: Exhibit[] = [
+  {
+    title: "PRISM — NSA FOIA record",
+    label: "OFFICIAL NSA DOCUMENT",
+    url: "https://www.nsa.gov/portals/75/documents/news-features/declassified-documents/media-leaks/prism_email.pdf",
+    description: "An NSA-hosted declassified/FOIA document containing contemporaneous internal discussion of PRISM-related records. Open the scan and inspect the original markings yourself."
+  },
+  {
+    title: "FISA Section 702 implementation",
+    label: "OFFICIAL NSA DOCUMENT",
+    url: "https://www.nsa.gov/portals/75/documents/news-features/speeches-testimonies/NSAImplementationofFISA70216Apr2014.FINAL.pdf",
+    description: "NSA's own implementation document explains selector tasking, provider assistance and the distinction between PRISM and Upstream collection."
+  },
+  {
+    title: "Section 702 — by the numbers",
+    label: "OFFICIAL FBI INFOGRAPHIC",
+    url: "https://www.fbi.gov/file-repository/section-702-by-the-numbers-092623.pdf/view",
+    description: "An FBI-published infographic. This is the kind of primary evidence VEXORA should show beside its interpretation rather than relying on a screenshot from a third-party article."
+  },
+  {
+    title: "FISA surveillance court records",
+    label: "FBI VAULT / FOIA",
+    url: "https://vault.fbi.gov/d1-release",
+    description: "The FBI Vault provides public scans of released FISA surveillance court orders and applications."
+  }
+];
 
 const visuals: Record<string, CaseVisual> = {
   "01": {
@@ -47,24 +78,26 @@ const visuals: Record<string, CaseVisual> = {
   },
   "05": {
     kicker: "SURVEILLANCE ARCHITECTURE",
-    title: "Section 702 → selectors → provider assistance → analysis",
-    description: "A clearer way to understand the surveillance chapter is as a chain of authorities and capabilities. This diagram intentionally separates legal authority from technical capability and from public claims.",
+    title: "PRISM • XKEYSCORE • Section 702 — inspect the record",
+    description: "This chapter now puts the primary documents beside the explanation. PRISM and XKEYSCORE should not be presented as vague internet lore: the NSA has publicly acknowledged XKEYSCORE as an analytic tool, and an NSA implementation document explicitly describes PRISM as one form of compelled provider assistance under Section 702.",
     metrics: [
       { label: "Section 702 targets", value: "246,073", note: "FBI testimony: authorized targets in 2022" },
       { label: "NSA reporting", value: "≈20%", note: "2022 NSA reporting containing Section 702 information" },
-      { label: "Primary agencies", value: "FBI + NSA", note: "Different roles in collection, assistance and analysis" },
+      { label: "Official record", value: "4 DOCS", note: "PRISM, 702 implementation, FBI infographic and FBI Vault" },
     ],
     bars: [
-      { label: "Foreign-intelligence target", value: 100, display: "1" },
-      { label: "Selector / tasking", value: 82, display: "2" },
-      { label: "Provider assistance", value: 64, display: "3" },
-      { label: "Analysis / reporting", value: 46, display: "4" },
+      { label: "Foreign-intelligence target", value: 100, display: "01" },
+      { label: "Selector / tasking", value: 82, display: "02" },
+      { label: "Provider assistance", value: 64, display: "03" },
+      { label: "Analysis / reporting", value: 46, display: "04" },
     ],
     sources: [
-      { name: "FBI", kind: "FISA & Section 702", url: "https://www.fbi.gov/how-we-investigate/intelligence/foreign-intelligence-surveillance-act-fisa-and-section-702", logo: "https://www.fbi.gov/image-repository/color-fbi-seal.png" },
-      { name: "NSA", kind: "Official materials", url: "https://www.nsa.gov/Press-Room/Press-Releases-Statements/Press-Release-View/Article/1618731/nsa-press-statement-in-response-to-allegations-about-nsa-operations/", logo: "https://www.nsa.gov/portals/75/images/nsa-logo.png" },
-      { name: "FBI Vault", kind: "Declassified records", url: "https://vault.fbi.gov/" },
+      { name: "FBI", kind: "FISA & Section 702", url: "https://www.fbi.gov/how-we-investigate/intelligence/foreign-intelligence-surveillance-act-fisa-and-section-702", logo: officialFbiSeal },
+      { name: "NSA", kind: "Official XKEYSCORE statement", url: "https://www.nsa.gov/serve-from-netstorage/Press-Room/Press-Releases-Statements/Press-Release-View/Article/1620989/press-statement-on-30-july-2013/index.html", logo: officialNsaLogo },
+      { name: "NSA FOIA / PRISM", kind: "Official declassified record", url: "https://www.nsa.gov/Press-Room/Digital-Media-Center/Document-Gallery/igphoto/2002760598/", logo: officialNsaLogo },
+      { name: "FBI Vault", kind: "Declassified records", url: "https://vault.fbi.gov/", logo: officialFbiSeal },
     ],
+    exhibits: surveillanceExhibits,
   },
   "09": {
     kicker: "BIOMETRIC SCALE",
@@ -103,7 +136,7 @@ const visuals: Record<string, CaseVisual> = {
     ],
     sources: [
       { name: "NPR", kind: "2024 reporting on internal documents", url: "https://www.npr.org/2024/10/12/g-s1-28040/teens-tiktok-addiction-lawsuit-investigation-documents" },
-      { name: "U.S. litigation record", kind: "State lawsuits / filings", url: "https://www.justice.gov/" },
+      { name: "U.S. Department of Justice", kind: "Public litigation resources", url: "https://www.justice.gov/" },
     ],
   },
 };
@@ -180,6 +213,30 @@ export default function CaseStudyEnhancements() {
           ))}
         </div>
       </div>
+
+      {data.exhibits && (
+        <div className="research-exhibits">
+          <div className="research-chart__title"><span>03</span> OFFICIAL DOCUMENT EXHIBITS</div>
+          <p className="research-exhibits__intro">These are direct links to government-hosted records. VEXORA does not recreate the documents or present third-party screenshots as originals. Each exhibit opens the official source, where the reader can inspect the scan, classification markings and surrounding context.</p>
+          <div className="research-exhibit-grid">
+            {data.exhibits.map((exhibit) => (
+              <article className="research-exhibit" key={exhibit.title}>
+                <div className="research-exhibit__preview">
+                  <div className="research-docbar"><span>OFFICIAL RECORD</span><b>PDF / FOIA</b></div>
+                  <div className="research-docpage">
+                    <div className="research-docseal">U.S.<br />GOV</div>
+                    <div className="research-doctext"><i>{exhibit.label}</i><strong>{exhibit.title}</strong><span>DOCUMENT PREVIEW</span><em>Open the original record ↗</em></div>
+                  </div>
+                </div>
+                <div className="research-exhibit__body">
+                  <span>{exhibit.label}</span><h3>{exhibit.title}</h3><p>{exhibit.description}</p>
+                  <a href={exhibit.url} target="_blank" rel="noreferrer">OPEN OFFICIAL DOCUMENT ↗</a>
+                </div>
+              </article>
+            ))}
+          </div>
+        </div>
+      )}
 
       <div className="research-method">
         <div><span>RESEARCH STANDARD</span><strong>Primary evidence first.</strong></div>
