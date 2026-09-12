@@ -1,23 +1,33 @@
 .detail-hero-image:has(img[src*="photo-1509967419530-da38b4704bc6"]){
   position:relative;
   overflow:hidden;
-  background:#111 url("https://img.generation-nt.com/clearview-ai_04b0027601713665.jpg") center/cover no-repeat;
+  min-height:clamp(320px,48vw,560px);
+  background:
+    url("https://commons.wikimedia.org/wiki/Special:Redirect/file/Clearview_AI_logo.svg") 28px 28px / 150px auto no-repeat,
+    linear-gradient(90deg,rgba(248,248,246,.94) 0%,rgba(248,248,246,.72) 42%,rgba(248,248,246,.06) 72%),
+    url("https://images.unsplash.com/photo-1534528741775-53994a69daeb?auto=format&fit=crop&w=1800&q=90") center/cover no-repeat;
 }
-
-.detail-hero-image:has(img[src*="photo-1509967419530-da38b4704bc6"]) img{
-  opacity:0;
-}
-
-.detail-hero-image:has(img[src*="photo-1509967419530-da38b4704bc6"]):after{
-  content:"CLEARVIEW AI • FACIAL RECOGNITION";
+.detail-hero-image:has(img[src*="photo-1509967419530-da38b4704bc6"]) img{opacity:0}
+.detail-hero-image:has(img[src*="photo-1509967419530-da38b4704bc6"])::before{
+  content:"";
   position:absolute;
-  left:24px;
-  bottom:22px;
-  z-index:3;
-  padding:8px 11px;
-  background:rgba(8,8,8,.86);
-  color:#f4f4f0;
-  border:1px solid rgba(255,255,255,.16);
-  font:500 10px/1.2 'DM Mono',monospace;
-  letter-spacing:.08em;
+  inset:0;
+  z-index:1;
+  background:linear-gradient(180deg,rgba(255,255,255,.08),transparent 48%,rgba(0,0,0,.12));
+  pointer-events:none;
+}
+.detail-hero-image:has(img[src*="photo-1509967419530-da38b4704bc6"])::after{
+  content:"CLEARVIEW AI\A FACIAL RECOGNITION";
+  white-space:pre;
+  position:absolute;
+  left:28px;
+  bottom:28px;
+  z-index:2;
+  padding:12px 15px;
+  background:rgba(255,255,255,.94);
+  color:#111;
+  border:1px solid rgba(0,0,0,.12);
+  box-shadow:0 10px 30px rgba(0,0,0,.14);
+  font:600 11px/1.5 'DM Mono',monospace;
+  letter-spacing:.09em;
 }
