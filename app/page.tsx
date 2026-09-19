@@ -38,7 +38,7 @@ export default function Home() {
         </div>
         <div className="nav-actions">
           <a href="https://chat.whatsapp.com/DdZJX2lpAsiDyuJdlAQ1jZ" target="_blank" rel="noopener noreferrer" className="button button-dark community-button">Join the community <span>↗</span></a>
-          <span className="status-pill"><i /> In development</span>
+          <span className="status-pill"><i /> Prototype ready</span>
         </div>
       </nav>
 
@@ -53,6 +53,7 @@ export default function Home() {
           <div className="hero-actions">
             <Link href="#vision" className="button button-dark">Explore the project <span>↓</span></Link>
             <Link href="/case-study" className="button button-light">Read the case study <span>↗</span></Link>
+            <Link href="/prototype" className="button button-light">Open working prototype <span>↗</span></Link>
             <a href="https://chat.whatsapp.com/DdZJX2lpAsiDyuJdlAQ1jZ" target="_blank" rel="noopener noreferrer" className="button button-light">Join the community <span>↗</span></a>
           </div>
         </div>
@@ -92,7 +93,8 @@ export default function Home() {
         <div className="final-line"><span>Learn.</span><span>Build.</span><span>Lead.</span><span>Shape the future.</span></div>
       </section>
 
-      <footer className="footer"><span>VEXORA © 2026</span><span>National Student Success Ecosystem</span><Link href="/case-study">Case study ↗</Link></footer>
+      <footer className="footer"><span>VEXORA © 2026</span><span>National Student Success Ecosystem</span><Link href="/case-study">Case study ↗</Link>
+        <Link href="/prototype">Prototype ↗</Link></footer>
     </main>
   );
 }
