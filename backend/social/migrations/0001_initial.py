@@ -39,7 +39,7 @@ class Migration(migrations.Migration):
             ("id", models.BigAutoField(auto_created=True, primary_key=True, serialize=False, verbose_name="ID")),
             ("text", models.TextField()), ("created_at", models.DateTimeField(auto_now_add=True)),
             ("recipient", models.ForeignKey(on_delete=django.db.models.deletion.CASCADE, related_name="received_messages", to="auth.user")),
-            ("sender", models.ForeignKey(on_delete=django.db.models.CASCADE, related_name="sent_messages", to="auth.user")),
+            ("sender", models.ForeignKey(on_delete=django.db.django.db.models.deletion.CASCADE, related_name="sent_messages", to="auth.user")),
         ]),
         migrations.CreateModel(name="Notification", fields=[
             ("id", models.BigAutoField(auto_created=True, primary_key=True, serialize=False, verbose_name="ID")),
