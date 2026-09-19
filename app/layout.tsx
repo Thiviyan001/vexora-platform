@@ -3,6 +3,7 @@ import type { ReactNode } from "react";
 import "./globals.css";
 import "./detail.css";
 import "./community.css";
+import "./prototype/prototype.css";
 
 export const metadata: Metadata = {
   title: "VEXORA — Student Success, Reimagined",
