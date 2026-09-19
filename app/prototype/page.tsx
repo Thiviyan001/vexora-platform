@@ -1,152 +1,71 @@
 'use client';
 
 import Link from "next/link";
-import { useMemo, useState } from "react";
+import { useState } from "react";
 
-type Mission = {
-  title: string;
-  category: string;
-  minutes: number;
-  xp: number;
-  description: string;
+type Post = {
+  id: number; initials: string; name: string; handle: string; time: string; kind: string;
+  title: string; body: string; tags: string[]; likes: number; comments: number; reposts: number; liked?: boolean;
 };
 
-const missions: Mission[] = [
-  { title: "Build a 3-step study plan", category: "Focus", minutes: 8, xp: 40, description: "Turn one subject you need to improve into three concrete actions." },
-  { title: "Python loop challenge", category: "Coding", minutes: 12, xp: 60, description: "Solve a short loop problem and explain why your solution works." },
-  { title: "Spot the misinformation", category: "Digital literacy", minutes: 7, xp: 35, description: "Inspect a claim, identify what needs verification, and choose a reliable source." },
+const starterPosts: Post[] = [
+  {id:1,initials:"VT",name:"VEXORA Team",handle:"@vexora",time:"12 min",kind:"Community update",title:"Welcome to the VEXORA community.",body:"This is a place to share what you're building, ask questions, find collaborators, discover communities, and turn ideas into real projects.",tags:["#VEXORA","#Students","#Community"],likes:42,comments:12,reposts:5},
+  {id:2,initials:"AS",name:"Ariyan S.",handle:"@ariyanbuilds",time:"28 min",kind:"Project showcase",title:"I finally got my sensor dashboard working.",body:"Built an ESP32 sensor dashboard this week. Looking for someone interested in UI/UX to help make the next version cleaner.",tags:["#Hardware","#ESP32","#Collab"],likes:27,comments:8,reposts:3},
+  {id:3,initials:"KM",name:"Kavya M.",handle:"@kavya_math",time:"1 hr",kind:"Question",title:"Anyone preparing for a maths olympiad?",body:"I'm working through number patterns and geometry. Would be great to find a small group to solve problems together.",tags:["#Mathematics","#Olympiad","#StudyGroup"],likes:19,comments:14,reposts:2},
 ];
 
-const projects = [
-  { name: "NFC Jukebox", type: "Hardware", progress: 72 },
-  { name: "VEXORA Study Path", type: "Product", progress: 48 },
-  { name: "CPU Simulator", type: "Computer Science", progress: 31 },
-];
+const communities=[{icon:"⌘",name:"Coding",members:"2.4K",detail:"Build, debug and share"},{icon:"◒",name:"Space & Astronomy",members:"1.8K",detail:"Explore the universe"},{icon:"△",name:"Game Development",members:"1.2K",detail:"Make games together"},{icon:"∑",name:"Mathematics",members:"980",detail:"Problems & olympiads"}];
+const people=[{initials:"NP",name:"Nethmi P.",role:"UI Designer",tag:"Design"},{initials:"RJ",name:"Ravin J.",role:"Python Builder",tag:"Coding"},{initials:"SK",name:"Sahan K.",role:"Astronomy",tag:"Space"}];
+const opportunities=[{title:"Student Innovation Showcase",type:"Showcase",meta:"Open · 12 days left"},{title:"Young Computer Scientist",type:"Competition",meta:"Round 1 · Open"},{title:"School Hackathon",type:"Hackathon",meta:"Teams of 2–4"}];
 
-const opportunities = [
-  { title: "School coding challenge", tag: "Competition", action: "Explore" },
-  { title: "Student innovation showcase", tag: "Innovation", action: "Prepare" },
-  { title: "Maths Olympiad practice", tag: "Olympiad", action: "Practice" },
-];
-
-export default function Prototype() {
-  const [tab, setTab] = useState("Today");
-  const [xp, setXp] = useState(320);
-  const [completed, setCompleted] = useState<string[]>([]);
-  const [focus, setFocus] = useState(false);
-  const [notice, setNotice] = useState("");
-
-  const level = useMemo(() => Math.floor(xp / 100) + 1, [xp]);
-  const nextLevel = level * 100;
-  const progress = Math.min(100, Math.round(((xp - (level - 1) * 100) / 100) * 100));
-
-  function completeMission(mission: Mission) {
-    if (completed.includes(mission.title)) return;
-    setCompleted((items) => [...items, mission.title]);
-    setXp((value) => value + mission.xp);
-    setNotice(`Mission completed: +${mission.xp} XP`);
-  }
-
-  function startFocus() {
-    setFocus((value) => !value);
-    setNotice(focus ? "Focus mode paused." : "Focus mode started — one task, no feed.");
-  }
-
-  return (
-    <main className="prototype-shell">
-      <header className="prototype-nav">
-        <Link href="/" className="proto-brand">VEXORA<span>.</span></Link>
-        <div className="proto-nav-center">
-          {["Today", "Learn", "Build", "Compete", "Opportunities"].map((item) => (
-            <button key={item} onClick={() => setTab(item)} className={tab === item ? "active" : ""}>{item}</button>
-          ))}
-        </div>
-        <div className="proto-user"><span className="live-dot" /> Prototype <b>VT</b></div>
-      </header>
-
-      <div className="prototype-body">
-        <aside className="proto-sidebar">
-          <div className="sidebar-profile">
-            <div className="avatar">VT</div>
-            <div><strong>Student workspace</strong><small>Level {level} · {xp} XP</small></div>
-          </div>
-          <div className="side-label">Workspace</div>
-          {["Today", "My learning", "My projects", "Competitions", "Opportunities"].map((item) => (
-            <button key={item} onClick={() => setTab(item)} className={tab.toLowerCase().startsWith(item.toLowerCase().slice(0, 4)) ? "side-active" : ""}>{item}<span>›</span></button>
-          ))}
-          <div className="side-note">
-            <span>VEXORA principle</span>
-            <strong>Creation before consumption.</strong>
-            <p>No infinite feed. No popularity race. You choose what to work on.</p>
-          </div>
-          <Link href="/case-study" className="case-link">Read the case study ↗</Link>
-        </aside>
-
-        <section className="proto-main">
-          <div className="proto-topline">
-            <div>
-              <p className="proto-eyebrow">{tab} / Student workspace</p>
-              <h1>{tab === "Today" ? <>Make progress.<br /><em>Not just time.</em></> : tab}</h1>
-            </div>
-            <button className={focus ? "focus-button on" : "focus-button"} onClick={startFocus}>◉ {focus ? "Focus mode on" : "Start focus mode"}</button>
-          </div>
-
-          {notice && <button className="notice" onClick={() => setNotice("")}>{notice} <span>×</span></button>}
-
-          {tab === "Today" && (
-            <>
-              <div className="progress-card">
-                <div><span className="mini-label">YOUR PATH</span><h2>Curiosity → Skill → Project → Opportunity</h2><p>VEXORA turns scattered student activity into a visible path of progress.</p></div>
-                <div className="level-ring"><strong>{level}</strong><span>LEVEL</span></div>
-                <div className="progress-bar"><i style={{ width: `${progress}%` }} /></div>
-                <small>{xp} / {nextLevel} XP toward the next level</small>
-              </div>
-
-              <div className="proto-grid two">
-                <section className="panel mission-panel">
-                  <div className="panel-head"><div><span className="mini-label">TODAY'S MISSIONS</span><h3>Do something real.</h3></div><span className="count">{completed.length}/3 done</span></div>
-                  {missions.map((mission) => (
-                    <article className={completed.includes(mission.title) ? "mission done" : "mission"} key={mission.title}>
-                      <div className="mission-icon">{completed.includes(mission.title) ? "✓" : "→"}</div>
-                      <div className="mission-copy"><span>{mission.category} · {mission.minutes} min</span><strong>{mission.title}</strong><p>{mission.description}</p></div>
-                      <button onClick={() => completeMission(mission)}>{completed.includes(mission.title) ? "Done" : `+${mission.xp} XP`}</button>
-                    </article>
-                  ))}
-                </section>
-
-                <section className="panel path-panel">
-                  <div className="panel-head"><div><span className="mini-label">YOUR DIRECTION</span><h3>Build toward something.</h3></div></div>
-                  <div className="path-line">
-                    {["Learn", "Practice", "Build", "Prove"].map((step, index) => <div key={step} className={index < 2 ? "path-step reached" : "path-step"}><i>{index + 1}</i><strong>{step}</strong><small>{index === 0 ? "3 skills" : index === 1 ? "12 challenges" : index === 2 ? "2 projects" : "0 submissions"}</small></div>)}
-                  </div>
-                  <button className="primary-wide" onClick={() => { setTab("My projects"); setNotice("Your project workspace is ready."); }}>Continue your path →</button>
-                </section>
-              </div>
-            </>
-          )}
-
-          {tab !== "Today" && (
-            <div className="proto-grid two">
-              <section className="panel">
-                <div className="panel-head"><div><span className="mini-label">LIVE PROTOTYPE</span><h3>{tab === "My projects" || tab === "Build" ? "Build something you can show." : tab === "Competitions" || tab === "Compete" ? "Turn preparation into proof." : tab === "Opportunities" ? "Find your next opening." : "Learn with a purpose."}</h3></div></div>
-                {tab === "My projects" || tab === "Build" ? projects.map((project) => (
-                  <article className="project-row" key={project.name}><div className="project-symbol">✦</div><div><strong>{project.name}</strong><span>{project.type}</span><div className="tiny-progress"><i style={{ width: `${project.progress}%` }} /></div></div><b>{project.progress}%</b></article>
-                )) : opportunities.map((opportunity) => (
-                  <article className="opportunity-row" key={opportunity.title}><div><span>{opportunity.tag}</span><strong>{opportunity.title}</strong></div><button onClick={() => setNotice(`${opportunity.title}: action opened in prototype.`)}>{opportunity.action} →</button></article>
-                ))}
-              </section>
-              <section className="panel dark-panel">
-                <span className="mini-label">WHY VEXORA</span>
-                <h3>{tab === "My learning" ? "Learning is the input. Capability is the output." : tab === "Opportunities" ? "Opportunities should meet students where their evidence is." : "A student platform should help you finish things."}</h3>
-                <p>Instead of an endless stream, this prototype gives the student a small number of intentional actions and connects them to projects, competitions and opportunities.</p>
-                <div className="dark-stat"><strong>{completed.length + 2}</strong><span>actions completed this session</span></div>
-              </section>
-            </div>
-          )}
-
-          <footer className="prototype-footer"><span>VEXORA prototype · local demo state</span><Link href="/case-study">Evidence & case study ↗</Link><Link href="/">Back to landing page ↗</Link></footer>
-        </section>
-      </div>
-    </main>
-  );
+export default function Prototype(){
+  const [tab,setTab]=useState("Home"),[posts,setPosts]=useState(starterPosts),[joined,setJoined]=useState<string[]>([]),[notice,setNotice]=useState(""),[composer,setComposer]=useState("");
+  function likePost(id:number){setPosts(items=>items.map(p=>p.id===id?{...p,liked:!p.liked,likes:p.likes+(p.liked?-1:1)}:p));}
+  function publish(){const text=composer.trim();if(!text){setNotice("Write something first.");return;}setPosts(items=>[{id:Date.now(),initials:"VT",name:"Your Profile",handle:"@you",time:"Just now",kind:"New post",title:"Sharing an update",body:text,tags:["#MyPost"],likes:0,comments:0,reposts:0},...items]);setComposer("");setNotice("Post published to your community.");setTab("Home");}
+  function toggleJoin(name:string){const was=joined.includes(name);setJoined(items=>was?items.filter(x=>x!==name):[...items,name]);setNotice((was?"Left ":"Joined ")+name+".");}
+  const nav=[["Home","⌂"],["Discover","⌕"],["Communities","◉"],["Messages","◇"],["Notifications","♢"],["Profile","◎"]];
+  return <main className="social-shell">
+    <header className="social-nav"><Link href="/" className="social-brand">VEXORA<span>.</span></Link><div className="social-search"><span>⌕</span><input placeholder="Search people, projects, communities..." /></div><div className="social-actions"><button onClick={()=>setTab("Notifications")}>♢<i>3</i></button><button className="nav-avatar" onClick={()=>setTab("Profile")}>VT</button></div></header>
+    <div className="social-layout">
+      <aside className="social-left"><div className="profile-mini"><div className="social-avatar large">VT</div><div><strong>VEXORA Student</strong><span>@yourprofile</span></div></div>
+        <nav className="social-navlinks">{nav.map(([name,icon])=><button key={name} className={tab===name?"selected":""} onClick={()=>setTab(name)}><b>{icon}</b><span>{name}</span>{name==="Notifications"&&<em>3</em>}</button>)}</nav>
+        <button className="create-btn" onClick={()=>setTab("Create")}>＋ Create</button>
+        <div className="left-community"><span>YOUR COMMUNITIES</span>{communities.slice(0,3).map(c=><button key={c.name} onClick={()=>setTab("Communities")}><i>{c.icon}</i>{c.name}<small>{joined.includes(c.name)?"Joined":"Explore"}</small></button>)}</div>
+        <div className="social-principle"><span>VEXORA PRINCIPLE</span><strong>Creation over consumption.</strong><p>A social network where students make things, find people and move ideas forward.</p></div><Link href="/case-study" className="case-link">Case study ↗</Link>
+      </aside>
+      <section className="social-feed"><div className="mobile-tabs">{nav.slice(0,3).map(([name])=><button key={name} className={tab===name?"active":""} onClick={()=>setTab(name)}>{name}</button>)}</div>
+        {notice&&<button className="social-notice" onClick={()=>setNotice("")}>{notice}<span>×</span></button>}
+        {tab==="Home"&&<><div className="feed-heading"><div><span>YOUR COMMUNITY</span><h1>What's happening?</h1></div><button onClick={()=>setTab("Create")}>＋ Create</button></div>
+          <section className="composer"><div className="social-avatar">VT</div><div className="composer-main"><textarea value={composer} onChange={e=>setComposer(e.target.value)} placeholder="Share an idea, project, question or opportunity..." /><div><span><button>◈ Project</button><button>?</button><button>⌁ Opportunity</button></span><button className="publish" onClick={publish}>Post</button></div></div></section>
+          <div className="feed-filter"><button className="active">For you</button><button>Following</button><button>Latest</button><span>Social feed · no infinite autoplay</span></div>
+          {posts.map(post=><article className="post-card" key={post.id}><div className="post-avatar social-avatar">{post.initials}</div><div className="post-content"><div className="post-meta"><strong>{post.name}</strong><span>{post.handle}</span><span>·</span><span>{post.time}</span><button>•••</button></div><span className="post-kind">{post.kind}</span><h2>{post.title}</h2><p>{post.body}</p><div className="post-tags">{post.tags.map(tag=><span key={tag}>{tag}</span>)}</div><div className="post-actions"><button className={post.liked?"liked":""} onClick={()=>likePost(post.id)}>♡ <span>{post.likes}</span></button><button onClick={()=>setNotice("Comments panel opened in the prototype.")}>◌ <span>{post.comments}</span></button><button>↻ <span>{post.reposts}</span></button><button>⌑</button></div></div></article>)}
+        </>}
+        {tab==="Discover"&&<Discover setTab={setTab}/>}
+        {tab==="Communities"&&<Communities joined={joined} toggleJoin={toggleJoin}/>}
+        {tab==="Create"&&<Create composer={composer} setComposer={setComposer} publish={publish}/>}
+        {tab==="Messages"&&<Messages/>}{tab==="Notifications"&&<Notifications/>}{tab==="Profile"&&<Profile setTab={setTab}/>}
+        <footer className="social-footer"><span>VEXORA prototype · local demo state</span><Link href="/case-study">Evidence & case study ↗</Link><Link href="/">Landing page ↗</Link></footer>
+      </section>
+      <aside className="social-right">
+        <section className="right-card identity-card"><span className="right-label">YOUR SPACE</span><div className="identity-row"><div className="social-avatar">VT</div><div><strong>Your Profile</strong><span>Builder · Creator · Student</span></div></div><div className="identity-stats"><b>7<span>Projects</span></b><b>24<span>Connections</span></b><b>3<span>Communities</span></b></div><button onClick={()=>setTab("Profile")}>View profile</button></section>
+        <section className="right-card"><div className="right-title"><span>Trending communities</span><button onClick={()=>setTab("Communities")}>View all</button></div>{communities.map(c=><button className="trend-row" key={c.name} onClick={()=>toggleJoin(c.name)}><i>{c.icon}</i><span><strong>{c.name}</strong><small>{c.members} students · {c.detail}</small></span><b>{joined.includes(c.name)?"✓":"+"}</b></button>)}</section>
+        <section className="right-card"><div className="right-title"><span>People to connect with</span><button onClick={()=>setTab("Discover")}>See all</button></div>{people.map(p=><button className="person-row" key={p.name}><div className="social-avatar small">{p.initials}</div><span><strong>{p.name}</strong><small>{p.role} · {p.tag}</small></span><b>＋</b></button>)}</section>
+        <section className="right-card opportunities"><div className="right-title"><span>Opportunities</span><button onClick={()=>setTab("Discover")}>Explore</button></div>{opportunities.map(o=><button className="opportunity-card" key={o.title}><span>{o.type}</span><strong>{o.title}</strong><small>{o.meta} →</small></button>)}</section>
+      </aside>
+    </div>
+  </main>;
 }
+
+function Discover({setTab}:{setTab:(tab:string)=>void}){return <div className="page-stack"><PageHero eyebrow="DISCOVER" title={<>Find people, ideas<br/><em>and communities.</em></>} text="VEXORA makes discovery intentional: explore projects, student creators, communities and opportunities instead of an endless algorithmic feed."/><div className="discover-grid"><section className="discover-card featured"><span>FEATURED PROJECT</span><h2>Build in public. Find your people.</h2><p>Share the thing you are making, get feedback and discover students who want to build alongside you.</p><button onClick={()=>setTab("Create")}>Share a project →</button></section><section className="discover-card"><span>TOPICS</span>{["Coding","Space & Astronomy","Game Development","Mathematics","Design","Science"].map(x=><button key={x}>{x}<b>→</b></button>)}</section></div><section className="discover-card opportunity-discover"><div><span>OPEN OPPORTUNITIES</span><h2>There's somewhere to take your idea.</h2></div>{opportunities.map(o=><div className="opportunity-line" key={o.title}><i>{o.type.slice(0,1)}</i><span><strong>{o.title}</strong><small>{o.meta}</small></span><button>Explore</button></div>)}</section></div>}
+
+function Communities({joined,toggleJoin}:{joined:string[];toggleJoin:(name:string)=>void}){return <div className="page-stack"><PageHero eyebrow="COMMUNITIES" title={<>Small groups.<br/><em>Big ideas.</em></>} text="Join communities around interests, projects, challenges and ideas. The goal is collaboration—not passive scrolling."/><div className="community-grid">{communities.map(c=><article className="community-card" key={c.name}><div className="community-icon">{c.icon}</div><span>{c.members} members</span><h2>{c.name}</h2><p>{c.detail}. Ask questions, share work and meet students with the same curiosity.</p><button onClick={()=>toggleJoin(c.name)}>{joined.includes(c.name)?"✓ Joined":"Join community"}</button></article>)}</div></div>}
+
+function Create({composer,setComposer,publish}:{composer:string;setComposer:(v:string)=>void;publish:()=>void}){return <div className="page-stack"><PageHero eyebrow="CREATE" title={<>Put something<br/><em>into the world.</em></>} text="Post a question, showcase a project, share an opportunity or start a conversation."/><section className="create-panel"><div className="create-tabs"><button className="active">Post</button><button>Project</button><button>Question</button><button>Opportunity</button></div><div className="create-author"><div className="social-avatar">VT</div><div><strong>Your Profile</strong><span>Public to VEXORA</span></div></div><textarea value={composer} onChange={e=>setComposer(e.target.value)} placeholder="What are you working on? What do you want to ask? What should the community know?"/><div className="create-bottom"><span>⌁ Add topic &nbsp; ◈ Add project &nbsp; ◇ Add image</span><button onClick={publish}>Publish post →</button></div></section></div>}
+
+function Messages(){return <div className="page-stack"><PageHero eyebrow="MESSAGES" title={<>Build together,<br/><em>not alone.</em></>} text="Private conversations are for collaboration, feedback and turning community connections into real teamwork."/><div className="messages-panel"><div className="message-list">{["Ariyan S.","VEXORA Team","Kavya M."].map((x,i)=><button key={x} className={i===0?"active":""}><div className="social-avatar small">{x.split(" ").map(n=>n[0]).join("")}</div><span><strong>{x}</strong><small>{i===0?"Can you review the new dashboard?":"New community message"}</small></span><b>{i===0?"2m":""}</b></button>)}</div><div className="message-empty"><div>◇</div><h2>Choose a conversation</h2><p>Messages keep collaboration moving after you meet someone through VEXORA.</p></div></div></div>}
+
+function Notifications(){return <div className="page-stack"><PageHero eyebrow="NOTIFICATIONS" title={<>Your community<br/><em>is responding.</em></>} text="See replies, reactions, new connections and community activity in one place."/><div className="notification-list">{["Ariyan liked your project showcase.","Kavya replied to your maths question.","VEXORA Team invited you to Coding.","Sahan started following your profile.","Student Innovation Showcase opened registration."].map((x,i)=><article key={x}><div className="notification-icon">{["♡","◌","⌘","＋","★"][i]}</div><span><strong>{x}</strong><small>{i+1} hour{i===0?"":"s"} ago</small></span><b>›</b></article>)}</div></div>}
+
+function Profile({setTab}:{setTab:(tab:string)=>void}){return <div className="page-stack"><section className="profile-hero"><div className="profile-cover"></div><div className="profile-info"><div className="social-avatar profile-avatar">VT</div><div className="profile-copy"><h1>Your Profile</h1><span>@yourprofile · Student · Builder</span><p>Building things, exploring ideas and finding people to build with.</p><div className="profile-tags"><span>⌘ Coding</span><span>◒ Space</span><span>△ Hardware</span></div></div><button onClick={()=>setTab("Create")}>＋ Create post</button></div><div className="profile-nav"><button className="active">Posts</button><button>Projects · 7</button><button>Communities · 3</button><button>About</button></div></section><div className="profile-grid"><section className="discover-card"><span>ABOUT</span><h2>Build your identity through what you actually do.</h2><p>Projects, conversations, communities and opportunities become part of a living student profile—not just a static résumé.</p></section><section className="discover-card"><span>ACTIVITY</span><div className="activity-stat"><b>24</b><span>connections</span><b>7</b><span>projects</span><b>3</b><span>communities</span></div></section></div></div>}
+
+function PageHero({eyebrow,title,text}:{eyebrow:string;title:React.ReactNode;text:string}){return <div className="page-hero"><span>{eyebrow}</span><h1>{title}</h1><p>{text}</p></div>}
