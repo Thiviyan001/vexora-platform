@@ -94,7 +94,7 @@ export default function Home() {
       </section>
 
       <footer className="footer"><span>VEXORA © 2026</span><span>National Student Success Ecosystem</span><Link href="/case-study">Case study ↗</Link>
-        <Link href="/prototype">Prototype ↗</Link></footer>
+        <Link href="/beat">BEAT ↗</Link></footer>
     </main>
   );
 }
