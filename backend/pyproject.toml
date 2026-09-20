@@ -11,5 +11,8 @@ dependencies = [
   "psycopg[binary]==3.2.10",
 ]
 
+[tool.vercel]
+entrypoint = "vexora.wsgi:application"
+
 [tool.vercel.scripts]
 build = "python manage.py migrate --noinput"
