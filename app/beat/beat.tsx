@@ -1,6 +1,5 @@
 "use client";
 
-import "./beat.css";
 import Link from "next/link";
 import { useEffect, useMemo, useRef, useState } from "react";
 
