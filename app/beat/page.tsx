@@ -1,3 +1,4 @@
+import "./beat.css";
 import Beat from "./beat";
 
 export const metadata = {
