@@ -72,3 +72,36 @@ html,body{background:var(--beat-bg)}
 .read-more{border:0;background:none;color:#9b8aff;font-size:12px;font-weight:800;padding:2px 0 10px;cursor:pointer}
 .read-more:hover{text-decoration:underline}
 .post-description{margin-bottom:5px!important}
+
+
+/* BEAT motion + editorial post refresh */
+.ig-shell button,.ig-shell a,.ig-shell input,.ig-shell textarea{transition:background-color .18s ease,color .18s ease,border-color .18s ease,transform .18s ease,opacity .18s ease,box-shadow .18s ease}
+.ig-shell button:active{transform:scale(.97)!important}
+.ig-shell button:focus-visible,.ig-shell a:focus-visible,.ig-shell input:focus-visible,.ig-shell textarea:focus-visible{outline:2px solid #7c5cff;outline-offset:2px}
+.ig-main{animation:beatPageIn .28s ease both}
+@keyframes beatPageIn{from{opacity:0;transform:translateY(5px)}to{opacity:1;transform:none}}
+.ig-post{animation:beatPostIn .42s ease both}
+@keyframes beatPostIn{from{opacity:0;transform:translateY(12px)}to{opacity:1;transform:none}}
+.post-art{position:relative!important;overflow:hidden!important;padding:0!important;background:#111318!important}
+.post-art>img{display:block!important;width:100%!important;height:100%!important;object-fit:cover!important;position:absolute!important;inset:0!important;z-index:0!important;opacity:1!important;transition:transform .7s cubic-bezier(.2,.7,.2,1),filter .4s ease!important}
+.post-art:hover>img{transform:scale(1.025);filter:saturate(1.08)}
+.post-art:after{content:"";position:absolute;inset:0;background:linear-gradient(180deg,rgba(0,0,0,.05) 20%,rgba(0,0,0,.18) 48%,rgba(0,0,0,.82) 100%);z-index:1;pointer-events:none}
+.post-art:before{z-index:2!important;pointer-events:none}
+.post-art .post-art-overlay{position:absolute;left:0;right:0;bottom:0;z-index:3;padding:30px!important;max-width:100%!important;display:flex;flex-direction:column;align-items:flex-start;gap:5px}
+.post-art .post-art-overlay span{font-size:42px;line-height:1}
+.post-art .post-art-overlay strong{font-size:30px;line-height:1.05}
+.post-art .post-art-overlay small{font-size:10px;letter-spacing:1.5px}
+.post-description{font-size:15px!important;line-height:1.65!important;margin-top:13px!important}
+.post-long{font-size:14px!important;line-height:1.8!important;display:-webkit-box;-webkit-line-clamp:3;-webkit-box-orient:vertical;overflow:hidden;max-width:650px}
+.read-more{display:inline-flex;align-items:center;gap:7px;font-family:Manrope,Arial,sans-serif!important;font-size:12px!important;letter-spacing:.1px}
+.read-more span,.comments span{display:inline-block;transition:transform .18s ease}
+.read-more:hover span,.comments:hover span{transform:translateX(3px)}
+.comments{font-family:"DM Mono","Courier New",monospace!important}
+.quick-create button,.share-btn,.people-card button,.community-grid article>button{box-shadow:0 8px 25px rgba(124,92,255,.16)}
+.quick-create button:hover,.share-btn:hover,.people-card button:hover,.community-grid article>button:hover{box-shadow:0 12px 32px rgba(124,92,255,.25);transform:translateY(-2px)}
+.ig-sidebar nav button,.side-bottom button{will-change:transform}
+.post-tools button{transition:transform .16s ease,background .16s ease,color .16s ease,box-shadow .16s ease!important}
+.post-tools button:active{transform:scale(.91)!important}
+.stories>button{transition:transform .18s ease,opacity .18s ease}
+.stories>button:hover{transform:translateY(-2px)}
+.avatar.photo{background-color:#161922}
