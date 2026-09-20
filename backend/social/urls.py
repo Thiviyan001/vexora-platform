@@ -1,6 +1,6 @@
 from django.urls import path, include
 from rest_framework.routers import DefaultRouter
-from .views import PostViewSet, StoryViewSet, ProfileViewSet, feed, messages_api, notifications, register, login, logout, me, follow
+from .views import PostViewSet, StoryViewSet, ProfileViewSet, feed, messages_api, notifications, register, login, logout, me, follow, health
 
 router = DefaultRouter()
 router.register("posts", PostViewSet)
@@ -8,6 +8,7 @@ router.register("stories", StoryViewSet)
 router.register("profiles", ProfileViewSet)
 
 urlpatterns = [
+    path("health/", health),
     path("", include(router.urls)),
     path("auth/register/", register),
     path("auth/login/", login),
