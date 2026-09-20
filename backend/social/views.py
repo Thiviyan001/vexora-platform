@@ -10,7 +10,12 @@ from .models import Profile, Post, Comment, Story, Message, Notification, Follow
 from .serializers import *
 
 def health(request):
-    return JsonResponse({"ok": True, "service": "vexora-django", "database": "connected"})
+    from django.db import connection
+    try:
+        connection.ensure_connection()
+        return JsonResponse({"ok": True, "service": "vexora-django", "database": "connected"})
+    except Exception as exc:
+        return JsonResponse({"ok": False, "service": "vexora-django", "database": "unavailable", "error": str(exc)}, status=503)
 
 def notify(user, text):
     Notification.objects.create(recipient=user, text=text)
