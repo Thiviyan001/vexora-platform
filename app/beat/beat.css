@@ -148,3 +148,60 @@ html,body{background:var(--beat-bg)}
 .ig-post header span{font-size:9px!important;color:#777d88!important}
 .post-tools{padding-top:9px!important}.post-tools button{font-size:21px!important}.post-likes{font-size:11px!important;font-weight:800!important}.post-description{color:#e5e7eb!important}.post-long{color:#9da3ad!important}
 @media(max-width:700px){.ig-post{padding-top:15px!important}.post-art{border-radius:8px!important}.quick-create{border-radius:12px!important}}
+
+/* BEAT innovation signals */
+.beat-attention-note{
+  margin:10px 0 2px;
+  padding:8px 12px;
+  border:1px solid #23262c;
+  border-radius:999px;
+  width:max-content;
+  max-width:100%;
+  color:#8f96a3;
+  background:#0c0e11;
+  font:700 9px/1.2 "DM Mono","Courier New",monospace;
+  letter-spacing:.6px;
+  text-transform:uppercase;
+}
+.beat-ranking-note{
+  display:inline-flex;
+  align-items:center;
+  margin:8px 0 2px;
+  padding:6px 9px;
+  border:1px solid #292d35;
+  border-radius:999px;
+  color:#a7adba;
+  background:#0c0e12;
+  font:700 8px/1.2 "DM Mono","Courier New",monospace;
+  letter-spacing:.45px;
+  text-transform:uppercase;
+}
+.beat-structured-post{
+  display:grid;
+  gap:9px;
+  margin-top:12px;
+}
+.beat-section{
+  padding:11px 13px;
+  border:1px solid #20242b;
+  border-radius:10px;
+  background:#0b0d10;
+}
+.beat-section>span{
+  display:block;
+  margin-bottom:5px;
+  color:#8f7cff;
+  font:800 8px/1 "DM Mono","Courier New",monospace;
+  letter-spacing:1.1px;
+}
+.beat-section p{
+  margin:0!important;
+  color:#d7dbe2!important;
+  font-size:12px!important;
+  line-height:1.55!important;
+}
+@media(max-width:700px){
+  .beat-attention-note{font-size:8px}
+  .beat-structured-post{gap:7px}
+  .beat-section{padding:10px 11px}
+}
