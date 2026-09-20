@@ -13,24 +13,66 @@ const seedPosts:Post[]=[
 {id:3,name:"Nethmi Designs",initials:"ND",time:"1h",image:"HISTORY",imageUrl:"/beat/history.svg",caption:"The printing press changed more than books.",description:"In 15th-century Europe, mechanical movable-type printing dramatically increased the speed and scale at which written material could be reproduced. Ideas could travel beyond the small circles that had traditionally controlled access to manuscripts. Read more to explore how printing affected education, religion, science, literacy and the spread of new arguments across Europe.",likes:903,comments:118,topic:"History",commentsList:[{id:5,name:"Sahan Space",text:"The connection between technology and social change is fascinating."},{id:6,name:"Ravin Codes",text:"A reminder that new technology can reshape who gets access to information."}]}
 ];
 const storyData=[["VT","You"],["AB","Ariyan"],["VS","VEXORA"],["KM","Kavya"],["RJ","Ravin"],["ND","Nethmi"],["SS","Sahan"]];
-const people=["Nethmi Designs","Ravin Codes","Sahan Space","Kavya Math","Ariyan Builds"];\nconst profilePhotos:Record<string,string>={"Your Profile":"/beat/avatar-you.svg","Nethmi Designs":"/beat/avatar-nethmi.svg","Ravin Codes":"/beat/avatar-ravin.svg","Sahan Space":"/beat/avatar-sahan.svg","Kavya Math":"/beat/avatar-kavya.svg","Ariyan Builds":"/beat/avatar-ariyan.svg","BEAT Space":"/beat/avatar-beat.svg"};
+const people=["Nethmi Designs","Ravin Codes","Sahan Space","Kavya Math","Ariyan Builds"];
+const profilePhotos:Record<string,string>={"Your Profile":"/beat/avatar-you.svg","Nethmi Designs":"/beat/avatar-nethmi.svg","Ravin Codes":"/beat/avatar-ravin.svg","Sahan Space":"/beat/avatar-sahan.svg","Kavya Math":"/beat/avatar-kavya.svg","Ariyan Builds":"/beat/avatar-ariyan.svg","BEAT Space":"/beat/avatar-beat.svg"};
+
+async function beatRequest(path:string, options:RequestInit={}, token?:string){
+ const headers=new Headers(options.headers);
+ headers.set("Content-Type","application/json");
+ if(token) headers.set("Authorization",`Token ${token}`);
+ const response=await fetch(`/api/beat/${path.replace(/^\\//,"")}`,{...options,headers,cache:"no-store"});
+ const data=await response.json().catch(()=>null);
+ if(!response.ok) throw new Error(data?.detail||`BEAT API error ${response.status}`);
+ return data;
+}
+
+function apiPostToUi(p:any):Post{
+ const author=p.author||"VEXORA Student";
+ return {id:p.id,name:author,initials:author.slice(0,2).toUpperCase(),time:"now",image:"COMMUNITY",imageUrl:"",caption:p.caption||"",description:"Shared from the VEXORA community.",likes:p.likes_count||0,comments:p.comments?.length||0,liked:!!p.liked,topic:"Community",commentsList:(p.comments||[]).map((x:any)=>({id:x.id,name:x.author,text:x.text}))};
+}
 const communities=["Coding","Space & Astronomy","Game Development","Mathematics","Design","Science"];
 
 export default function Beat(){
- const [posts,setPosts]=useState<Post[]>(seedPosts),[tab,setTab]=useState("Home"),[composer,setComposer]=useState(""),[joined,setJoined]=useState<string[]>([]),[notice,setNotice]=useState(""),[following,setFollowing]=useState<string[]>([]),[saved,setSaved]=useState<number[]>([]),[story,setStory]=useState<string|null>(null),[search,setSearch]=useState(""),[profileName,setProfileName]=useState("Your Profile"),[bio,setBio]=useState("Building things, exploring ideas and finding people to build with."),[editProfile,setEditProfile]=useState(false),[commentPost,setCommentPost]=useState<number|null>(null),[commentText,setCommentText]=useState(""),[message,setMessage]=useState(""),[chat,setChat]=useState<string[]>(["Can you check my new project? ⚡","Sure! Send it here."]);
+ const [posts,setPosts]=useState<Post[]>(seedPosts),[tab,setTab]=useState("Home"),[token,setToken]=useState<string|null>(null),[authOpen,setAuthOpen]=useState(false),[composer,setComposer]=useState(""),[joined,setJoined]=useState<string[]>([]),[notice,setNotice]=useState(""),[following,setFollowing]=useState<string[]>([]),[saved,setSaved]=useState<number[]>([]),[story,setStory]=useState<string|null>(null),[search,setSearch]=useState(""),[profileName,setProfileName]=useState("Your Profile"),[bio,setBio]=useState("Building things, exploring ideas and finding people to build with."),[editProfile,setEditProfile]=useState(false),[commentPost,setCommentPost]=useState<number|null>(null),[commentText,setCommentText]=useState(""),[message,setMessage]=useState(""),[chat,setChat]=useState<string[]>(["Can you check my new project? ⚡","Sure! Send it here."]);
  const fileRef=useRef<HTMLInputElement|null>(null);
- useEffect(()=>{try{const raw=localStorage.getItem("vexora-demo");if(raw){const x=JSON.parse(raw);if(x.posts)setPosts(x.posts);if(x.following)setFollowing(x.following);if(x.joined)setJoined(x.joined);if(x.saved)setSaved(x.saved);if(x.profileName)setProfileName(x.profileName);if(x.bio)setBio(x.bio)}}catch{}},[]);
+ useEffect(()=>{
+ try{
+  const raw=localStorage.getItem("vexora-demo");
+  const savedToken=localStorage.getItem("vexora_token");
+  if(savedToken)setToken(savedToken);
+  if(raw){const x=JSON.parse(raw);if(x.posts)setPosts(x.posts);if(x.following)setFollowing(x.following);if(x.joined)setJoined(x.joined);if(x.saved)setSaved(x.saved);if(x.profileName)setProfileName(x.profileName);if(x.bio)setBio(x.bio)}
+ }catch{}
+},[]);
+useEffect(()=>{
+ if(!token)return;
+ beatRequest("feed/",{method:"GET"},token).then((data:any[])=>{
+   if(Array.isArray(data)&&data.length)setPosts(data.map(apiPostToUi));
+ }).catch(()=>notify("BEAT is offline — showing local feed."));
+},[token]);
  useEffect(()=>{try{localStorage.setItem("vexora-demo",JSON.stringify({posts,following,joined,saved,profileName,bio}))}catch{}},[posts,following,joined,saved,profileName,bio]);
  const notify=(x:string)=>{setNotice(x);window.setTimeout(()=>setNotice(""),2600)};
- const like=(id:number)=>setPosts(ps=>ps.map(p=>p.id===id?{...p,liked:!p.liked,likes:p.likes+(p.liked?-1:1)}:p));
+ const like=async(id:number)=>{
+ if(token){try{await beatRequest(`posts/${id}/like/`,{method:"POST"},token);const data=await beatRequest("feed/",{method:"GET"},token);setPosts(data.map(apiPostToUi));return}catch{}}
+ setPosts(ps=>ps.map(p=>p.id===id?{...p,liked:!p.liked,likes:p.likes+(p.liked?-1:1)}:p))
+};
  const savePost=(id:number)=>{setPosts(ps=>ps.map(p=>p.id===id?{...p,saved:!p.saved}:p));setSaved(s=>s.includes(id)?s.filter(x=>x!==id):[...s,id]);notify(saved.includes(id)?"Removed from saved":"Saved to your collection");};
  const toggleFollow=(name:string)=>{setFollowing(f=>f.includes(name)?f.filter(x=>x!==name):[...f,name]);notify(following.includes(name)?"Unfollowed "+name:"Following "+name)};
- const publish=()=>{if(!composer.trim()){notify("Write something before posting.");return}setPosts(ps=>[{id:Date.now(),name:profileName,initials:"VT",time:"now",image:"YOUR POST",imageUrl:"/beat/math.svg",caption:composer.trim(),description:"A new idea from the BEAT community. Open the full post to explore the project, context and what could come next.",likes:0,comments:0,topic:"Community",commentsList:[]},...ps]);setComposer("");notify("Your post is live");setTab("Home")};
- const addComment=(id:number)=>{if(!commentText.trim())return;setPosts(ps=>ps.map(p=>p.id===id?{...p,comments:p.comments+1,commentsList:[...p.commentsList,{id:Date.now(),name:profileName,text:commentText.trim()}]}:p));setCommentText("");notify("Comment added")};
+ const publish=async()=>{
+ if(!composer.trim()){notify("Write something before posting.");return}
+ if(token){
+  try{await beatRequest("posts/",{method:"POST",body:JSON.stringify({caption:composer.trim()})},token);const data=await beatRequest("feed/",{method:"GET"},token);setPosts(data.map(apiPostToUi));setComposer("");notify("Your post is live");setTab("Home");return}catch{notify("Could not publish to the server.");return}
+ }
+ setPosts(ps=>[{id:Date.now(),name:profileName,initials:"VT",time:"now",image:"YOUR POST",imageUrl:"/beat/math.svg",caption:composer.trim(),description:"A new idea from the BEAT community. Open the full post to explore the project, context and what could come next.",likes:0,comments:0,topic:"Community",commentsList:[]},...ps]);setComposer("");notify("Your post is live");setTab("Home")
+};
+ const addComment=async(id:number)=>{
+ if(!commentText.trim())return;
+ if(token){try{await beatRequest(`posts/${id}/comment/`,{method:"POST",body:JSON.stringify({text:commentText.trim()})},token);const data=await beatRequest("feed/",{method:"GET"},token);setPosts(data.map(apiPostToUi));setCommentText("");notify("Comment added");return}catch{}}
+ setPosts(ps=>ps.map(p=>p.id===id?{...p,comments:p.comments+1,commentsList:[...p.commentsList,{id:Date.now(),name:profileName,text:commentText.trim()}]}:p));setCommentText("");notify("Comment added")
+};
  const share=(p:Post)=>{const text=p.name+" on BEAT: "+p.caption;if(navigator.share)navigator.share({title:"BEAT",text}).catch(()=>{});else navigator.clipboard?.writeText(text).then(()=>notify("Post text copied"));};
  const nav=[["Home","⌂"],["Discover","⌕"],["Create","＋"],["Reels","▶"],["Messages","✉"],["Profile","VT"]];
  return <main className="ig-shell">
-  <aside className="ig-sidebar"><Link href="/" className="ig-logo">BEAT</Link><nav>{nav.map(([n,icon])=><button key={n} className={tab===n?"active":""} onClick={()=>setTab(n)}><b>{icon}</b><span>{n}</span>{n==="Messages"&&<i>3</i>}</button>)}</nav><div className="side-bottom"><button onClick={()=>setTab("Communities")}><b>◉</b><span>Communities</span></button><button onClick={()=>setTab("Notifications")}><b>♢</b><span>Notifications</span></button><button onClick={()=>setTab("Saved")}><b>⌑</b><span>Saved</span></button><Link href="/case-study">Case Study ↗</Link></div></aside>
+  <aside className="ig-sidebar"><Link href="/" className="ig-logo">BEAT</Link><nav>{nav.map(([n,icon])=><button key={n} className={tab===n?"active":""} onClick={()=>setTab(n)}><b>{icon}</b><span>{n}</span>{n==="Messages"&&<i>3</i>}</button>)}</nav><div className="side-bottom"><button onClick={()=>setTab("Communities")}><b>◉</b><span>Communities</span></button><button onClick={()=>setAuthOpen(true)}><b>◈</b><span>{token?"Server connected":"Sign in to BEAT"}</span></button><button onClick={()=>setTab("Notifications")}><b>♢</b><span>Notifications</span></button><button onClick={()=>setTab("Saved")}><b>⌑</b><span>Saved</span></button><Link href="/case-study">Case Study ↗</Link></div></aside>
   <div className="ig-mobile-top"><Link href="/" className="ig-logo">BEAT</Link><div><button onClick={()=>setTab("Notifications")}>♡</button><button onClick={()=>setTab("Messages")}>✉</button></div></div>
   <section className="ig-main">
    {notice&&<button className="ig-toast" onClick={()=>setNotice("")}>{notice} ×</button>}
@@ -47,6 +89,7 @@ export default function Beat(){
   <aside className="ig-right"><ProfileMini name={profileName}/><div className="right-title">Suggested for you <button onClick={()=>setTab("Discover")}>See All</button></div>{people.slice(0,3).map((x,i)=><div className="suggest" key={x}><div className="avatar photo" style={{backgroundImage:`url(${profilePhotos[x]})`}}></div><span><strong>{x}</strong><small>{["UI Designer","Python Builder","Astronomy"][i]}</small></span><button onClick={()=>toggleFollow(x)}>{following.includes(x)?"Following":"Follow"}</button></div>)}<div className="right-title space">Trending communities</div>{communities.slice(0,4).map(x=><button className="trend" key={x} onClick={()=>setJoined(j=>j.includes(x)?j.filter(a=>a!==x):[...j,x])}><span>#{x.replaceAll(" ","")}</span><small>{joined.includes(x)?"Joined":"Join"}</small></button>)}<footer>© 2026 BEAT · Privacy · About · Communities · Case Study</footer></aside>
   {story&&<StoryViewer story={story} close={()=>setStory(null)}/>}
   {commentPost!==null&&<CommentModal post={posts.find(p=>p.id===commentPost)!} text={commentText} setText={setCommentText} add={()=>addComment(commentPost)} close={()=>setCommentPost(null)}/>}
+  {authOpen&&<AuthModal close={()=>setAuthOpen(false)} onAuth={(t)=>{setToken(t);setAuthOpen(false);notify("BEAT account connected")}}/>}
   {editProfile&&<EditProfile name={profileName} bio={bio} setName={setProfileName} setBio={setBio} close={()=>setEditProfile(false)} save={()=>{setEditProfile(false);notify("Profile updated")}}/>}
  </main>
 }
@@ -70,3 +113,5 @@ function Saved({posts,setTab}:{posts:Post[];setTab:(x:string)=>void}){return <di
 function StoryViewer({story,close}:{story:string;close:()=>void}){return <div className="modal-backdrop story-modal" onClick={close}><div className="story-view" onClick={e=>e.stopPropagation()}><button className="modal-close" onClick={close}>×</button><div className="story-progress"></div><div className="story-center"><div className="story-avatar">{story.slice(0,2).toUpperCase()}</div><h2>{story}</h2><p>Student creator · BEAT story</p><div className="story-art">✦</div></div></div></div>}
 function CommentModal({post,text,setText,add,close}:{post:Post;text:string;setText:(x:string)=>void;add:()=>void;close:()=>void}){return <div className="modal-backdrop" onClick={close}><div className="comment-modal" onClick={e=>e.stopPropagation()}><button className="modal-close" onClick={close}>×</button><h2>Comments</h2><p className="comment-caption"><b>{post.name}</b> {post.caption}</p><div className="comment-list">{post.commentsList.map(c=><div className="comment" key={c.id}><div className="avatar photo" style={{backgroundImage:`url(${profilePhotos[c.name]||"https://i.pravatar.cc/150?img=5"})`}}></div><span><b>{c.name}</b> {c.text}</span></div>)}</div><div className="comment-compose"><input autoFocus value={text} onChange={e=>setText(e.target.value)} onKeyDown={e=>e.key==="Enter"&&add()} placeholder="Add a comment..."/><button onClick={add}>Post</button></div></div></div>}
 function EditProfile({name,bio,setName,setBio,close,save}:{name:string;bio:string;setName:(x:string)=>void;setBio:(x:string)=>void;close:()=>void;save:()=>void}){const [n,setN]=useState(name),[b,setB]=useState(bio);return <div className="modal-backdrop" onClick={close}><div className="edit-modal" onClick={e=>e.stopPropagation()}><button className="modal-close" onClick={close}>×</button><h2>Edit profile</h2><label>Name<input value={n} onChange={e=>setN(e.target.value)}/></label><label>Bio<textarea value={b} onChange={e=>setB(e.target.value)}/></label><button className="share-btn" onClick={()=>{setName(n);setBio(b);save()}}>Save changes</button></div></div>}
+
+function AuthModal({close,onAuth}:{close:()=>void;onAuth:(token:string)=>void}){const [mode,setMode]=useState<"login"|"register">("login");const [u,setU]=useState("");const [p,setP]=useState("");const [err,setErr]=useState("");const submit=async()=>{try{const data=await beatRequest(`auth/${mode}/`,{method:"POST",body:JSON.stringify({username:u,password:p})});localStorage.setItem("vexora_token",data.token);onAuth(data.token)}catch(e:any){setErr(e.message||"Could not connect")}};return <div className="modal-backdrop" onClick={close}><div className="edit-modal" onClick={e=>e.stopPropagation()}><button className="modal-close" onClick={close}>×</button><h2>{mode==="login"?"Sign in to BEAT":"Create your BEAT account"}</h2><label>Username<input value={u} onChange={e=>setU(e.target.value)} /></label><label>Password<input type="password" value={p} onChange={e=>setP(e.target.value)} /></label>{err&&<p>{err}</p>}<button className="share-btn" onClick={submit}>{mode==="login"?"Sign in":"Create account"}</button><button className="link-btn" onClick={()=>setMode(mode==="login"?"register":"login")}>{mode==="login"?"Create an account":"Back to sign in"}</button></div></div>}
