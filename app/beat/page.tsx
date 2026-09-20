@@ -1,4 +1,4 @@
-import Prototype from "../prototype/page";
+import Beat from "./beat";
 
 export const metadata = {
   title: "BEAT — Beat your ideas.",
@@ -6,5 +6,5 @@ export const metadata = {
 };
 
 export default function BeatPage() {
-  return <Prototype />;
+  return <Beat />;
 }
