@@ -1,0 +1,15 @@
+[project]
+name = "vexora-backend"
+version = "1.0.0"
+requires-python = ">=3.12,<3.15"
+dependencies = [
+  "Django==5.2.6",
+  "djangorestframework==3.16.1",
+  "django-cors-headers==4.9.0",
+  "Pillow==11.3.0",
+  "dj-database-url==2.3.1",
+  "psycopg[binary]==3.2.10",
+]
+
+[tool.vercel.scripts]
+build = "python manage.py migrate --noinput"
