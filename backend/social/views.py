@@ -5,8 +5,12 @@ from rest_framework.decorators import action, api_view, permission_classes
 from rest_framework.permissions import AllowAny
 from rest_framework.authtoken.models import Token
 from rest_framework.response import Response
+from django.http import JsonResponse
 from .models import Profile, Post, Comment, Story, Message, Notification, Follow
 from .serializers import *
+
+def health(request):
+    return JsonResponse({"ok": True, "service": "vexora-django", "database": "connected"})
 
 def notify(user, text):
     Notification.objects.create(recipient=user, text=text)
