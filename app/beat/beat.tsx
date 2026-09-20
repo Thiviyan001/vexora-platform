@@ -20,7 +20,7 @@ async function beatRequest(path:string, options:RequestInit={}, token?:string){
  const headers=new Headers(options.headers);
  headers.set("Content-Type","application/json");
  if(token) headers.set("Authorization",`Token ${token}`);
- const response=await fetch(`/api/beat/${path.replace(/^\\//,"")}`,{...options,headers,cache:"no-store"});
+ const response=await fetch(`/api/beat/${path.replace(/^\/+/, "")}`,{...options,headers,cache:"no-store"});
  const data=await response.json().catch(()=>null);
  if(!response.ok) throw new Error(data?.detail||`BEAT API error ${response.status}`);
  return data;
