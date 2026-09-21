@@ -27,10 +27,7 @@
 
 :root{font-family:var(--font-geist),Arial,sans-serif}body{font-family:var(--font-geist),Arial,sans-serif}code,pre,.mono{font-family:var(--font-geist-mono),monospace}
 
-/* Main VEXORA landing page contrast */
-.hero .eyebrow,.hero-meta{color:#fff!important}
-.hero-lead{color:#fff!important}
-.nav-links{color:#fff!important}.nav-links a{color:#fff!important}.nav-links a:hover{color:#fff!important}
-.status-pill{color:#fff!important}
-.footer{color:#fff!important}.footer a{color:#fff!important}
-.section-heading>p,.coming-copy,.roadmap p,.eco-card p{color:#fff!important}
+/* Main VEXORA hero contrast */
+.hero h1{color:#fff!important}
+.hero h1 em{color:#fff!important}
+.hero .eyebrow,.hero-meta,.hero-lead{color:#fff!important}
