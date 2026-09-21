@@ -59,6 +59,16 @@ export default function Home() {
         <div className="hero-meta"><span>01 / 06</span><span>Currently in development</span></div>
       </section>
 
+      <section className="beat-intro section-pad">
+        <div className="beat-intro-copy">
+          <p className="eyebrow">Inside VEXORA</p>
+          <h2>Meet <span>BEAT.</span></h2>
+          <p>BEAT is the social platform inside VEXORA — built to turn ideas into action. Discover student projects, explore subjects, share what you are building, and connect with people who care about the same things.</p>
+          <Link href="/beat" className="button button-dark">Open BEAT <span>↗</span></Link>
+        </div>
+        <div className="beat-intro-mark"><span>BEAT</span><small>Beat your ideas.</small></div>
+      </section>
+
       <section id="vision" className="dark-section section-pad">
         <div className="section-label">The idea</div>
         <div className="vision-grid">
