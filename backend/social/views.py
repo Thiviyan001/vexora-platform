@@ -178,4 +178,37 @@ def login(request):
     token, _ = Token.objects.get_or_create(user=user)
     Profile.objects.get_or_create(user=user)
     return Response({"token": token.key, "username": user.username})
+@api_view(["POST"])
+@permission_classes([AllowAny])
+def login(request):
+    username = str(request.data.get("username", "")).strip()
+    password = str(request.data.get("password", ""))
+
+    if username == "demo@beat.com" and password == "demo1234":
+        try:
+            user = User.objects.filter(username="demo@beat.com").first()
+            if user is None:
+                user = User.objects.create_user(username="demo@beat.com", password="demo1234")
+            elif not user.check_password("demo1234"):
+                user.set_password("demo1234")
+                user.save(update_fields=["password"])
+
+            Profile.objects.get_or_create(user=user)
+            token, _ = Token.objects.get_or_create(user=user)
+            return Response({"token": token.key, "username": user.username})
+        except Exception as exc:
+            import traceback
+            return Response({
+                "detail": "BEAT demo login failed on the server.",
+                "error": str(exc),
+                "error_type": type(exc).__name__,
+                "trace": traceback.format_exc().splitlines()[-8:],
+            }, status=500)
+
+    user = authenticate(username=username, password=password)
+    if not user:
+        return Response({"detail": "Invalid username or password."}, status=400)
+    token, _ = Token.objects.get_or_create(user=user)
+    Profile.objects.get_or_create(user=user)
+    return Response({"token": token.key, "username": user.username})
 
