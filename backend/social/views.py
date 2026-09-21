@@ -151,4 +151,31 @@ def messages_api(request):
 
 @api_view(["GET"])
 def notifications(request):
-    return Response(NotificationSerializer(Notification.objects.filter(recipient=request.user).order_by("-created_at"), many=True).data)
+    return Response(NotificationSerializer(Notification.objects.filter(recipient=request.user).order_by("-created_at"), many=True).data)@api_view(["POST"])
+@permission_classes([AllowAny])
+def login(request):
+    username = request.data.get("username", "").strip()
+    password = request.data.get("password", "")
+
+    if username == "demo@beat.com" and password == "demo1234":
+        try:
+            user, _ = User.objects.get_or_create(username="demo@beat.com")
+            if not user.check_password("demo1234"):
+                user.set_password("demo1234")
+                user.save(update_fields=["password"])
+            Profile.objects.get_or_create(user=user)
+            token, _ = Token.objects.get_or_create(user=user)
+            return Response({"token": token.key, "username": user.username})
+        except Exception as exc:
+            return Response(
+                {"detail": "BEAT demo login failed on the server.", "error": str(exc)},
+                status=500,
+            )
+
+    user = authenticate(username=username, password=password)
+    if not user:
+        return Response({"detail": "Invalid username or password."}, status=400)
+    token, _ = Token.objects.get_or_create(user=user)
+    Profile.objects.get_or_create(user=user)
+    return Response({"token": token.key, "username": user.username})
+
