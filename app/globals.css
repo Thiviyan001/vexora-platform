@@ -59,3 +59,20 @@
 .final-line{color:#fff}
 .footer{background:#070809;color:#b8bdc6;border-top-color:#2a2d33}
 .footer a{color:#fff}
+
+
+/* Ecosystem section — white typography */
+.ecosystem-section{background:#070809;color:#fff}
+.ecosystem-section .eyebrow,
+.ecosystem-section .section-heading>p{color:#b8bdc6}
+.ecosystem-section .section-heading h2,
+.ecosystem-section .section-heading h2 span{color:#fff}
+.ecosystem-grid{border-color:#2a2d33}
+.ecosystem-section .eco-card{background:#0d0f12;border-color:#2a2d33;color:#fff}
+.ecosystem-section .eco-card:hover{background:#15171b;color:#fff;border-color:#41454d}
+.ecosystem-section .card-number{color:#8d939e}
+.ecosystem-section .eco-icon{color:#fff;border-color:#555b66}
+.ecosystem-section .eco-card h3{color:#fff}
+.ecosystem-section .eco-card p{color:#b8bdc6}
+.ecosystem-section .eco-card:hover p{color:#d9dce2}
+.ecosystem-section .card-arrow{color:#fff}
