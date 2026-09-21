@@ -259,3 +259,15 @@ html,body{background:var(--beat-bg)}
   .ig-main h1::after{margin-top:11px;width:28px;height:2px}
   .profile-head h1{font-size:25px!important}
 }
+
+
+/* BEAT brand + post method labels */
+.beat-brand{display:flex;flex-direction:column;gap:8px;padding:8px 13px 30px}
+.beat-brand .ig-logo{padding:0}
+.beat-logo-tagline{max-width:185px;color:#737985;font:600 8px/1.45 "DM Mono","Courier New",monospace;letter-spacing:.35px}
+.ig-post header>div:nth-child(2){min-width:0}
+.beat-method-row{display:flex;flex-wrap:wrap;gap:5px;margin-top:5px}
+.beat-method-row span{display:inline-flex;align-items:center;padding:4px 6px;border:1px solid #2a2e37;border-radius:5px;background:#101218;color:#a69aff;font:800 7px/1 "DM Mono","Courier New",monospace;letter-spacing:.8px}
+.demo-credentials{margin:8px 0 12px!important;padding:9px 10px;border:1px solid #282d36;border-radius:8px;background:#0b0d10;color:#8f96a3!important;font:700 10px/1.5 "DM Mono","Courier New",monospace!important}
+.demo-credentials strong{color:#e6e8ee!important}
+@media(max-width:700px){.beat-brand{padding:5px 0 12px;gap:4px}.beat-logo-tagline{max-width:150px;font-size:7px}.beat-method-row{gap:4px}.beat-method-row span{font-size:6.5px;padding:3px 5px}}
