@@ -291,3 +291,13 @@ html,body{background:var(--beat-bg)}
 .beat-login-card .auth-submit{display:flex!important;align-items:center!important;justify-content:center!important;width:100%!important;min-height:52px!important;margin:20px 0 0!important;padding:15px 20px!important;background:#7c5cff!important;color:#fff!important;border:0!important;border-radius:10px!important;font:800 13px/1 "Manrope",Arial,sans-serif!important;letter-spacing:.2px!important;opacity:1!important;visibility:visible!important;position:relative!important;z-index:5!important;cursor:pointer!important}
 .beat-login-card .auth-submit:hover{background:#8b72ff!important;transform:translateY(-1px)!important}
 .beat-login-card .auth-submit:disabled{background:#7c5cff!important;color:#fff!important;opacity:.7!important}
+
+
+/* BEAT opening quote */
+.beat-quote{margin:0 0 18px;padding:18px 20px;border:1px solid #25262d;border-radius:14px;background:linear-gradient(135deg,#0e1015,#11131a);display:flex;align-items:center;gap:15px;position:relative;overflow:hidden}
+.beat-quote:after{content:"";position:absolute;width:170px;height:170px;right:-70px;top:-90px;border-radius:50%;background:radial-gradient(circle,rgba(124,92,255,.2),transparent 68%);pointer-events:none}
+.beat-quote-mark{font:400 42px Georgia,serif;color:#8b7cff;line-height:.7}
+.beat-quote strong,.beat-quote small{display:block;position:relative;z-index:1}
+.beat-quote strong{font:600 14px 'Space Grotesk',Arial,sans-serif;letter-spacing:-.02em;color:#fff}
+.beat-quote small{font:9px 'DM Mono',monospace;text-transform:uppercase;letter-spacing:.09em;color:#777d89;margin-top:5px}
+@media(max-width:700px){.beat-quote{margin:10px 0 8px;padding:15px 16px}.beat-quote strong{font-size:13px}.beat-quote small{font-size:8px}}
