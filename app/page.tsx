@@ -53,7 +53,6 @@ export default function Home() {
           <div className="hero-actions">
             <Link href="#vision" className="button button-dark">Explore the project <span>↓</span></Link>
             <Link href="/case-study" className="button button-light">Read the case study <span>↗</span></Link>
-            <Link href="/prototype" className="button button-light">Open working prototype <span>↗</span></Link>
             <a href="https://chat.whatsapp.com/DdZJX2lpAsiDyuJdlAQ1jZ" target="_blank" rel="noopener noreferrer" className="button button-light">Join the community <span>↗</span></a>
           </div>
         </div>
