@@ -44,3 +44,18 @@
 .beat-intro-mark span{font:800 clamp(70px,10vw,140px) 'Space Grotesk';letter-spacing:-.09em}
 .beat-intro-mark small{font:11px 'DM Mono';text-transform:uppercase;letter-spacing:.16em;color:#8f96a3;margin-top:8px}
 @media(max-width:760px){.beat-intro{grid-template-columns:1fr;gap:40px}.beat-intro-mark{min-height:220px}.beat-intro-copy h2{font-size:20vw}}
+
+
+/* Coming soon + footer finish */
+.coming{background:#070809;color:#fff}
+.coming .eyebrow{color:#9ca3af}
+.coming h2,.coming h2 em{color:#fff}
+.coming-copy{color:#c4c8d0!important}
+.roadmap{border-top-color:#2a2d33}
+.roadmap>div{border-right-color:#2a2d33}
+.roadmap span{color:#8d939e}
+.roadmap strong{color:#fff}
+.roadmap p{color:#b8bdc6!important}
+.final-line{color:#fff}
+.footer{background:#070809;color:#b8bdc6;border-top-color:#2a2d33}
+.footer a{color:#fff}
