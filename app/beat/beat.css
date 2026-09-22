@@ -347,3 +347,21 @@ html{scroll-behavior:smooth}
   .post-art:hover{box-shadow:none}
   .beat-section:hover{transform:none}
 }
+
+/* Sidebar viewport fix */
+.ig-sidebar{position:fixed!important;left:max(0px,calc((100vw - 1520px)/2))!important;top:0!important;width:240px!important;height:100dvh!important;min-height:100dvh!important;z-index:40!important;overflow-y:auto!important;overflow-x:hidden!important;overscroll-behavior:contain!important;scrollbar-width:thin}
+.ig-sidebar .side-bottom{margin-top:auto;padding-top:14px;flex-shrink:0}
+.ig-sidebar .side-bottom a{display:block;flex-shrink:0}
+@media(min-width:1051px){
+  .ig-shell{padding-left:274px!important}
+}
+@media(min-width:1051px) and (max-width:1520px){
+  .ig-sidebar{left:0!important}
+}
+@media(max-width:1050px){
+  .ig-sidebar{position:sticky!important;left:auto!important;width:72px!important;height:100vh!important;min-height:100vh!important;overflow-y:auto!important}
+  .ig-shell{padding-left:0!important}
+}
+@media(max-width:700px){
+  .ig-sidebar{display:none!important}
+}
