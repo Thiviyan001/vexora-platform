@@ -1,6 +1,6 @@
 import { NextRequest, NextResponse } from "next/server";
 
-const API_URL = (process.env.DJANGO_API_URL || "https://vexora-platform-eta.vercel.app").replace(/\/$/, "");
+const API_URL = (process.env.DJANGO_API_URL || "https://vexora-beat-api-l5c7b.faable.link").replace(/\/$/, "");
 
 async function handler(request: NextRequest, context: { params: Promise<{ path: string[] }> }) {
   if (!API_URL) {
