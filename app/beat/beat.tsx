@@ -21,9 +21,8 @@ async function beatRequest(path:string, options:RequestInit={}, token?:string){
  const headers=new Headers(options.headers);
  headers.set("Content-Type","application/json");
  if(token) headers.set("Authorization",`Token ${token}`);
- const base=(process.env.NEXT_PUBLIC_DJANGO_API_URL||"https://vexora-platform-eta.vercel.app").replace(/\/$/,"");
  const cleanPath=path.replace(/^\/+/, "").replace(/\/$/,"");
- const response=await fetch(`${base}/api/${cleanPath}/`,{...options,headers,cache:"no-store"});
+ const response=await fetch(`/api/beat/${cleanPath}/`,{...options,headers,cache:"no-store"});
  const data=await response.json().catch(()=>null);
  if(!response.ok) throw new Error(data?.detail||`BEAT API error ${response.status}`);
  return data;
