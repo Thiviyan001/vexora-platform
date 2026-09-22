@@ -16,7 +16,7 @@ export async function POST(request:Request){
         headers:{
           "Content-Type":"application/json",
           "Authorization":`Bearer ${key}`,
-          "X-Title":"BEAT — Beat Your Ideas"
+          "X-Title":"BEAT - Beat Your Ideas"
         },
         body:JSON.stringify({
           model,
