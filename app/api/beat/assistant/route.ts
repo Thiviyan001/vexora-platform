@@ -7,7 +7,7 @@ export async function POST(request:Request){
     const key=process.env.OPENROUTER_API_KEY?.trim();
     if(!key)return Response.json({error:"AI is not connected yet. Add OPENROUTER_API_KEY to the deployment environment."},{status:503});
 
-    const model=process.env.OPENROUTER_MODEL?.trim()||"openai/gpt-oss-120b:free";
+    const model=process.env.OPENROUTER_MODEL?.trim()||"openrouter/free";
 
     let response:Response;
     try{
