@@ -369,3 +369,44 @@ html{scroll-behavior:smooth}
 @media(max-width:700px){
   .ig-sidebar{display:none!important}
 }
+
+
+/* BEAT student social layer — group chat */
+.messages-head{display:flex;align-items:end;justify-content:space-between;gap:20px;margin-bottom:22px}
+.messages-head h1{margin-bottom:8px!important}
+.messages-head p{margin:0;max-width:620px;color:#8f96a3;font-size:13px;line-height:1.6}
+.chat-live{display:inline-flex;align-items:center;gap:7px;padding:7px 10px;border:1px solid #27302a;border-radius:999px;background:#0b110e;color:#8fd8a6;font:800 8px "DM Mono",monospace;letter-spacing:.7px;white-space:nowrap}
+.group-chat-panel{min-height:620px!important}
+.group-list-title{padding:0 14px 10px;color:#666d78;font:800 8px "DM Mono",monospace;letter-spacing:1.1px}
+.dm-list>button i{margin-left:auto;color:#8f96a3;font-style:normal;font-size:9px}
+.new-group{border-top:1px solid #20242b!important;margin-top:8px;padding-top:16px!important}
+.new-group>b{font-size:20px;color:#9b8cff}
+.group-top{gap:11px}
+.group-top>div:nth-child(2){display:flex;flex-direction:column;min-width:0}
+.group-top small{display:block;color:#737985;font-size:9px;margin-top:3px}
+.group-top>span{margin-left:auto;color:#737985}
+.chat-tools{display:flex;align-items:center;gap:7px;flex-wrap:wrap;padding:10px 14px;border-bottom:1px solid #20242b;background:#0b0d10}
+.chat-tools button{padding:7px 9px;border:1px solid #292e37;border-radius:7px;background:#12151a;color:#dce0e7;font:700 9px "Manrope",sans-serif;cursor:pointer}
+.chat-tools button:hover{border-color:#5a4dc0;background:#151822}
+.chat-tools small{color:#666d78;font-size:8px;margin-left:auto}
+.group-members{display:flex;align-items:center;gap:4px;padding:9px 14px;border-bottom:1px solid #20242b}
+.group-members span{display:grid;place-items:center;width:23px;height:23px;border-radius:50%;background:#252a34;color:#fff;font:800 7px Manrope,sans-serif;border:2px solid #0d0f12}
+.group-members span+span{margin-left:-8px}
+.group-members b{margin-left:5px;color:#7f8692;font:700 8px "DM Mono",monospace}
+.chat-scroll{flex:1;min-height:330px;max-height:420px;overflow:auto;padding:16px 14px;display:flex;flex-direction:column;gap:14px}
+.group-message{display:flex;align-items:flex-start;gap:9px;max-width:86%}
+.group-message.mine{margin-left:auto;flex-direction:row-reverse}
+.message-avatar{width:28px!important;height:28px!important;min-width:28px!important;font-size:8px!important}
+.group-message>div:last-child{min-width:0}
+.group-message>div:last-child>small{display:block;margin:0 0 4px;color:#707783;font:700 8px "DM Mono",monospace}
+.group-message.mine>div:last-child>small{text-align:right}
+.assistant-bubble{border-color:#3b3470!important;background:#111022!important}
+.canva-action{margin-top:5px;border:0;background:transparent;color:#9d8cff;font:700 8px "DM Mono",monospace;cursor:pointer;padding:0}
+.canva-action:hover{color:#c0b6ff}
+@media(max-width:760px){
+ .messages-head{align-items:flex-start;flex-direction:column;gap:10px}
+ .chat-live{display:none}
+ .group-chat-panel{min-height:600px!important}
+ .chat-tools small{width:100%;margin-left:0}
+ .chat-scroll{max-height:390px}
+}
