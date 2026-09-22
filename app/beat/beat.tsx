@@ -103,11 +103,16 @@ function Reels({notify}:{notify:(x:string)=>void}){const rs=["BUILD","SPACE","CO
 function Messages({message,setMessage,chat,setChat,group,setGroup,groupChats,setGroupChats}:{message:string;setMessage:(x:string)=>void;chat:string[];setChat:(x:string[])=>void;group:string;setGroup:(x:string)=>void;groupChats:Record<string,string[]>;setGroupChats:(x:Record<string,string[]>)=>void}){
  const groups=["VEXORA Builders","Robotics Lab","Math Olympiad","Space & Astronomy"];
  const current=groupChats[group]||[];
- const send=()=>{
+ const send=async()=>{
   const raw=message.trim(); if(!raw)return;
-  let reply="";
-  if(raw.toLowerCase().startsWith("@chatgpt")){const q=raw.replace(/^@chatgpt\s*/i,"");reply="ChatGPT · AI mentor: "+(q?"Here is a useful starting point: break \""+q+"\" into the goal, the known facts, and the next testable step. Share the exact question and I can work through it with you.":"Ask me a question about maths, coding, science, projects or study.");}
-  else if(raw.toLowerCase().startsWith("@canva")){const prompt=raw.replace(/^@canva\s*/i,"");reply="Canva · design request queued: "+(prompt||"Create a student project graphic")+". Connect Canva to turn this request into an editable design.";}
+  if(raw.toLowerCase().startsWith("@chatgpt")){
+   const q=raw.replace(/^@chatgpt\s*/i,"");
+   setGroupChats({...groupChats,[group]:[...current,"You: "+raw,"ChatGPT · AI mentor: Thinking…"]});
+   setMessage("");
+   try{const r=await fetch("/api/beat/assistant",{method:"POST",headers:{"Content-Type":"application/json"},body:JSON.stringify({question:q})});const data=await r.json();const updated=[...current,"You: "+raw,"ChatGPT · AI mentor: "+(data.answer||data.error||"AI is unavailable.")];setGroupChats({...groupChats,[group]:updated});}catch{setGroupChats({...groupChats,[group]:[...current,"You: "+raw,"ChatGPT · AI mentor: AI is unavailable right now."]});}
+   return;
+  }
+  const reply=raw.toLowerCase().startsWith("@canva")?"Canva · design request queued: "+(raw.replace(/^@canva\s*/i,"")||"Create a student project graphic")+". Connect Canva to turn this request into an editable design.":"";
   setGroupChats({...groupChats,[group]:[...current,"You: "+raw,...(reply?[reply]:[])]});setMessage("");
  };
  return <div className="messages">
