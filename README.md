@@ -2,22 +2,26 @@
 
 **The ecosystem, research and case-study layer behind BEAT.**
 
-VEXORA is the parent project. It contains the problem research, evidence, case studies, product story and competition documentation.
+VEXORA is the parent project and wider student-success ecosystem. It contains the problem research, evidence, case studies, product story, competition documentation and the BEAT social platform.
 
-**Case studies:** https://vexora-platform-bqij.vercel.app/case-study
+**Case studies:** https://vexoraplatform.netlify.app/case-study
 
 ## BEAT
 
 **Beat your ideas.**
 
-BEAT is VEXORA's social platform product — a student social network for discovering people and ideas, sharing projects and questions, collaborating, and finding opportunities.
+BEAT is VEXORA's social platform product — a student social network for discovering people and ideas, sharing projects and questions, collaborating in communities, and finding opportunities.
 
-**Live demo:** https://vexora-platform-bqij.vercel.app/beat  
-**Case study:** https://vexora-platform-bqij.vercel.app/case-study  
-**Video demo:** see the video file included with the competition submission  
+**Live demo:** https://vexoraplatform.netlify.app/beat  
+**Case study:** https://vexoraplatform.netlify.app/case-study  
+**Video demo:** see the video file included in the competition submission  
 **GitHub:** https://github.com/Thiviyan001/vexora-platform
 
+> **Demo account:** `demo@beat.com` / `demo1234`
+
 BEAT is the working product layer; VEXORA provides the surrounding research, evidence and case-study layer.
+
+---
 
 ## Product loop
 
@@ -35,7 +39,7 @@ VEXORA's case-study layer documents research and public evidence concerning algo
 
 BEAT is a purpose-built student social platform for discovering ideas, sharing projects and questions, collaborating with other students, and finding opportunities.
 
-Its content model supports a structured **Problem → Insight → Challenge** format for educational and idea-driven posts, alongside social features such as profiles, stories, communities, discovery, messaging, saved content, likes and comments.
+Its content model supports a structured **Problem → Insight → Challenge** format for educational and idea-driven posts, alongside profiles, stories, communities, discovery, messaging, saved content, likes and comments.
 
 ### Novelty
 
@@ -43,35 +47,146 @@ BEAT combines a student-focused social experience with a structured educational 
 
 ---
 
-## Architecture
+## Post structure
 
-### Current implementation
+Every BEAT idea can be organized around:
 
-The live BEAT experience is implemented in Next.js. The repository also contains a separate React + Vite frontend and a Django REST backend.
+**Problem → Insight → Challenge**
 
-For the current competition build, the live BEAT feed and social interactions use local frontend state. Django is integrated as the backend foundation for authentication and is available for local verification. The broader REST API and data models provide the foundation for future persistent social operations.
+This turns a conventional social post into a structured learning and creation interaction.
+
+![BEAT Post](images/screenshot-post.png)
+
+---
+
+## Authentication
+
+![BEAT Sign In](images/screenshot-signin.png)
+
+The BEAT interface includes a simple sign-in experience for the competition demo.
+
+> **Demo account:** `demo@beat.com` / `demo1234`
+
+The repository also contains the Django REST authentication layer and broader backend implementation. The public competition demo uses a local demo-authentication path so the demo account does not depend on backend authentication availability.
+
+---
+
+## Case study
+
+![BEAT Case Study](images/screenshot-casestudy.png)
+
+The full case study is available at:
+
+https://vexoraplatform.netlify.app/case-study
+
+It documents the problem research, evidence, design decisions and product story behind BEAT and VEXORA.
+
+---
+
+# Architecture
+
+BEAT uses a separated frontend, API-proxy and backend architecture.
 
 ```
-VEXORA
-│
-├── Research & Case Studies
-│   └── /case-study
-│
-└── BEAT
-    └── /beat
-        │
-        ├── Next.js frontend
-        │
-        └── Django REST backend
-            │
-            └── PostgreSQL-ready data layer
+                         VEXORA
+              National Student Success
+                       Ecosystem
+                            │
+                            ▼
+                          BEAT
+                    "Beat your ideas"
+                            │
+          ┌─────────────────┼─────────────────┐
+          │                 │                 │
+          ▼                 ▼                 ▼
+       Social            Discover        Communities
+       Feed              Subjects        Group Chat
+          │                 │                 │
+          └─────────────────┼─────────────────┘
+                            ▼
+                 Problem → Insight → Challenge
+                            │
+                            ▼
+                    Next.js / React
+                       Frontend
+                            │
+                            ▼
+                         Netlify
+                            │
+                            ▼
+                    /api/beat/* Proxy
+                            │
+                            ▼
+                    Django REST API
+                            │
+                 ┌──────────┼──────────┐
+                 │          │          │
+                 ▼          ▼          ▼
+            Auth / Users  Social     Messages
+                 │          │          │
+                 └──────────┼──────────┘
+                            ▼
+                       PostgreSQL
 ```
 
-> **Current state:** BEAT is a working Next.js social platform with a Django REST backend in the repository. The live demonstration currently uses local frontend state for the main social experience. Django authentication and the broader backend API can be run and verified locally. Production backend deployment and full database-backed social operations are planned as the next integration milestone.
+### Request flow
+
+```
+Browser
+   │
+   ▼
+Netlify / Next.js
+   │
+   │ /api/beat/*
+   ▼
+Next.js API proxy
+   │
+   │ HTTPS
+   ▼
+Faable Django server
+   │
+   ▼
+Django REST Framework
+   │
+   ▼
+PostgreSQL
+```
+
+The Next.js API proxy forwards BEAT API requests and authorization headers to the Django service.
+
+## Current deployment
+
+### Frontend
+
+**Netlify**
+
+https://vexoraplatform.netlify.app/
+
+BEAT:
+
+https://vexoraplatform.netlify.app/beat
+
+### Backend
+
+**Faable Django service**
+
+https://vexora-beat-api-l5c7b.faable.link
+
+Health endpoint:
+
+https://vexora-beat-api-l5c7b.faable.link/api/health/
+
+The health endpoint has been verified and reports the Django service and database connection status.
+
+### Database
+
+The deployed Django service uses a PostgreSQL-compatible production database layer.
+
+---
 
 ## Backend capabilities
 
-The Django application contains models and REST endpoints for:
+The Django application provides the foundation for:
 
 - Users and profiles
 - Authentication
@@ -82,12 +197,15 @@ The Django application contains models and REST endpoints for:
 - Following
 - Messages
 - Notifications
+- Feed operations
 
-The production backend is **not currently deployed**. PostgreSQL is prepared as the intended production database layer but is **not yet connected to the live Vercel deployment**.
+Backend repository:
+
+https://github.com/Thiviyan001/vexora-beat-api
 
 ## API endpoints
 
-The repository includes endpoints including:
+The backend includes routes such as:
 
 - `GET /api/health/`
 - `POST /api/auth/register/`
@@ -103,7 +221,7 @@ The repository includes endpoints including:
 - `GET /api/messages/`
 - `GET /api/notifications/`
 
-These endpoints describe the backend implementation in the repository; they should not be interpreted as all being connected to the current live demo.
+These describe backend capabilities; not every endpoint is necessarily exercised by the public competition demo.
 
 ## Data model
 
@@ -111,32 +229,122 @@ Django is designed to persist:
 
 **users and profiles · follows · posts · likes · comments · stories · messages · notifications**
 
+```
+User
+ │
+ ├── Profile
+ ├── Posts
+ │    ├── Likes
+ │    └── Comments
+ ├── Stories
+ ├── Messages
+ ├── Notifications
+ └── Follows ───────► User
+```
+
 ---
 
-## Installation
+## AI mentor
 
-### Option A — Live deployment
+BEAT includes an AI mentor endpoint for student assistance.
+
+```
+BEAT
+  │
+  │ @chatgpt
+  ▼
+/api/beat/assistant
+  │
+  ▼
+OpenRouter
+  │
+  ▼
+AI model
+  │
+  ▼
+Student response
+```
+
+The assistant is intended for mathematics, coding, science, projects and study questions.
+
+---
+
+## Group collaboration
+
+BEAT includes student group spaces such as:
+
+- **VEXORA Builders**
+- **Robotics Lab**
+- **Math Olympiad**
+- **Space & Astronomy**
+
+The group chat interface also provides entry points for AI assistance and future creative-tool integrations.
+
+The current `@canva` command is a design-request placeholder. A full Canva Connect integration is a future milestone.
+
+---
+
+# Repository structure
+
+```
+vexora-platform/
+│
+├── app/
+│   ├── page.tsx                    # VEXORA homepage
+│   │
+│   ├── beat/
+│   │   ├── page.tsx                # BEAT route
+│   │   ├── beat.tsx                # BEAT application
+│   │   ├── beat.css                # BEAT styling
+│   │   └── post/
+│   │       └── [id]/
+│   │           └── page.tsx         # Full post pages
+│   │
+│   ├── case-study/
+│   │   └── [id]/                   # VEXORA case studies
+│   │
+│   └── api/
+│       └── beat/
+│           ├── [...path]/
+│           │   └── route.ts         # Django API proxy
+│           └── assistant/
+│               └── route.ts         # AI mentor endpoint
+│
+├── public/
+│   └── beat/                       # BEAT local assets
+│
+├── frontend/                       # Separate React + Vite frontend
+├── backend/                        # Django REST backend
+├── package.json
+└── README.md
+```
+
+---
+
+# Installation
+
+## Option A — Live deployment
 
 Open:
 
-https://vexora-platform-bqij.vercel.app/beat
+https://vexoraplatform.netlify.app/beat
 
 No installation is required.
 
-> **Note:** The live Vercel deployment may lag behind the latest GitHub `main` branch when Vercel's deployment quota is exhausted. The GitHub repository is the source of truth for the latest code.
+> **Demo account:** `demo@beat.com` / `demo1234`
 
-### Option B — Run the Next.js BEAT frontend locally
+## Option B — Run Next.js / BEAT locally
 
-#### Requirements
+### Requirements
 
 | Tool | Version |
 | --- | --- |
 | Node.js | 18.x LTS or higher |
 | npm | 9.x or higher |
-| Python | 3.12.x recommended for the current backend configuration |
+| Python | 3.11+ |
 | pip | 23.x or higher |
 
-#### Next.js / BEAT
+### Next.js / BEAT
 
 ```bash
 git clone https://github.com/Thiviyan001/vexora-platform.git
@@ -151,7 +359,7 @@ http://localhost:3000/beat
 
 ### React + Vite frontend
 
-A separate React + Vite frontend is also included in `frontend/`.
+A separate React + Vite frontend is included in `frontend/`.
 
 ```bash
 cd frontend
@@ -161,7 +369,7 @@ npm run dev
 
 ### Django backend
 
-The backend is included in `backend/` and can be run locally.
+The backend is included in `backend/`.
 
 ```bash
 cd backend
@@ -171,11 +379,13 @@ python -m venv .venv
 Activate the environment:
 
 **Windows**
-```bash
+
+```text
 .venv\\Scripts\\activate
 ```
 
 **macOS / Linux**
+
 ```bash
 source .venv/bin/activate
 ```
@@ -189,11 +399,11 @@ python manage.py createsuperuser
 python manage.py runserver
 ```
 
-The backend will run at:
+The backend runs at:
 
 http://localhost:8000
 
-Verify the health endpoint:
+Verify:
 
 ```bash
 curl http://localhost:8000/api/health/
@@ -209,29 +419,77 @@ Expected response:
 }
 ```
 
-> **Important:** The local Django backend is not connected to the current live Vercel deployment. It is provided so judges and developers can inspect and run the backend independently.
+---
+
+# Technical stack
+
+| Layer | Technology |
+| --- | --- |
+| Ecosystem / product | VEXORA + BEAT |
+| Main frontend | Next.js / React |
+| Styling | CSS |
+| Standalone frontend | React + Vite |
+| Backend | Python / Django |
+| API | Django REST Framework |
+| Database | PostgreSQL |
+| AI mentor | OpenRouter |
+| Frontend hosting | Netlify |
+| Backend hosting | Faable |
+| Source control | GitHub |
 
 ---
 
-## Technical direction
+# Competition documentation
 
-BEAT uses:
+The competition submission includes:
 
-- **Next.js / React** for the main web experience
-- **React + Vite** for the standalone social frontend
-- **Python + Django + Django REST Framework** for the backend
-- **PostgreSQL** as the intended persistent production database
+```
+BEAT_SUBMISSION/
+│
+├── Project description
+├── BEAT screenshots
+├── Architecture
+├── Innovation explanation
+├── Backend explanation
+├── Demo links
+├── GitHub documentation
+├── VEXORA case studies
+└── Video demonstration
+```
 
-The next backend milestone is to connect persistent post, like, comment, follow, message and notification operations to the production API and database.
+The VEXORA case-study layer contains the supporting research and evidence, while BEAT remains focused on the actual product experience.
 
-VEXORA remains the parent research and case-study layer, while BEAT is the product layer built on top of that ecosystem.
+---
 
-## Competition documentation
+## Project direction
 
-The repository and accompanying submission folder contain the project description, screenshots, architecture material, innovation explanation, backend documentation, demonstration material and supporting VEXORA case studies.
+BEAT is being developed as the social layer of the wider VEXORA ecosystem.
+
+The architecture is designed to grow into a persistent student platform with:
+
+- database-backed social activity
+- richer communities
+- persistent messaging
+- student opportunities
+- AI mentorship
+- creative-tool integrations
+- Focus Mode
+- Mission Board
+- competitions
+- student portfolios
+
+The central product idea remains:
+
+> **Problem → Insight → Challenge**
+
+VEXORA provides the ecosystem and research layer.
+
+**BEAT turns that ecosystem into a place where students can discover, create and collaborate.**
+
+---
 
 ## Contact
 
-vcthivi@gmail.com
+**vcthivi@gmail.com**
 
-<!-- Deployment sync marker 3 -->
+For project questions, please use the contact information above.
