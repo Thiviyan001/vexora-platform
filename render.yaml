@@ -1,0 +1,25 @@
+services:
+  - type: web
+    name: vexora-beat-api
+    runtime: python
+    plan: free
+    rootDir: backend
+    buildCommand: pip install -r requirements.txt && python manage.py migrate && python manage.py collectstatic --noinput
+    startCommand: gunicorn vexora.wsgi:application
+    healthCheckPath: /api/health/
+    envVars:
+      - key: DJANGO_SECRET_KEY
+        generateValue: true
+      - key: DJANGO_DEBUG
+        value: "false"
+      - key: FRONTEND_URL
+        sync: false
+      - key: DATABASE_URL
+        fromDatabase:
+          name: vexora-beat-db
+          property: connectionString
+
+databases:
+  - name: vexora-beat-db
+    plan: free
+    region: singapore
